@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const db = require("../db");
 
-const Review = db.define("request", {
+const Review = db.define("review", {
     date:{
         type: DataTypes.DATEONLY,
         allowNull: false,
