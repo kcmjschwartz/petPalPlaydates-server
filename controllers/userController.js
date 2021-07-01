@@ -3,10 +3,11 @@ const { UniqueConstraintError } = require("sequelize/lib/errors");
 const {UserModel} = require('../models');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const middleware = require("../middleware");
 
 /*
 ===============
-REGISTER USER
+?REGISTER USER
 ===============
 */
 router.post('/register', async (req, res) => {
@@ -43,7 +44,7 @@ router.post('/register', async (req, res) => {
 
 /*
 ===========
-LOGIN USER
+?LOGIN USER
 ===========
 */
 
@@ -84,5 +85,79 @@ router.post("/login", async (req, res) => {
         })
     }
 });
+
+/*
+==============================
+!GET ALL USERS PROTECTED ROUTE
+==============================
+*/
+router.get('/admin/getall', middleware.validateAdmin, async (req, res) =>{
+    try{
+        const entries = await UserModel.findAll();
+        res.status(200).json(entries);
+    } catch (err) {
+        res.status(500).json({error: err});
+    }
+});
+
+
+
+
+/*
+=================================
+!UPDATE USER ROLE PROTECTED ROUTE
+=================================
+*/
+
+router.put("/admin/update/:id", middleware.validateAdmin, async(req, res) =>{
+    let {role} = req.body.user;
+    const updateUser = { role: role };
+    const query = { where: {
+        id: req.params.id
+    }};
+    try{
+        const foundUser = await UserModel.findOne(query);
+        if (foundUser){
+            await UserModel.update(updateUser, query);
+            res.status(201).json({ UpdatedUser: updateUser });
+        } else {
+            res.status(406).json({
+                message:'User not found.'
+            })
+        }
+    } catch (err){
+        res.status(500).json({error:err})
+    }
+
+});
+
+
+
+
+/*
+==============================
+!DELETE PROTECTED ROUTE
+==============================
+*/
+
+router.delete("/admin/delete/:id", middleware.validateAdmin, async(req, res) =>{
+    
+    try {
+        const userDeleted = await UserModel.destroy({
+            where: {id: req.params.id}
+        })
+        res.status(200).json({
+            message: "User deleted",
+            userDeleted
+        })
+
+    }catch (err) {
+        res.status(500).json({
+            message: `Failed to delete user: ${err}`
+        })
+    }
+})
+
+
 
 module.exports = router;

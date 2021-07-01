@@ -13,10 +13,6 @@ const Pet = db.define("pet", {
     description: {
         type: DataTypes.TEXT,
         allowNull: false,
-    },
-    imageUrl: {
-        type: DataTypes.STRING,
-        allowNull: false,
     }
 });
 
