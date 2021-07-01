@@ -21,7 +21,8 @@ const validateSession = async(req,res,next) =>{
                 console.log('request -->', req);
                 req.user = foundUser;
                 next()
-            }else{
+            }else
+            {
                 res.status(400).send({
                     msg: `Not Authorized!`
                 })  
