@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const {PetModel, UserModel} = require('../models');
+const {PetModel, RequestModel, ReviewModel, UserModel} = require('../models');
 const middleware = require("../middleware");
 const Pet = require('../models/pet');
 const User = require('../models/user');
@@ -79,7 +79,7 @@ router.get("/myPets/", middleware.validateSession, async(req, res) => {
         const userPets = await PetModel.findAll({
             where:{
                 userId: id
-            }
+            },
         });
         res.status(200).json(userPets);
     } catch (err) {
@@ -92,7 +92,7 @@ router.get("/myPets/", middleware.validateSession, async(req, res) => {
 
 /*
 =======================
-* UPDATE PET By User
+? UPDATE PET By User
 =======================
 */
 router.put("/update/:petId", middleware.validateSession , async (req, res) => {
@@ -204,6 +204,61 @@ router.delete("/admin/delete/:id",  middleware.validateAdmin, async(req, res) =>
         })
     }
 })
+
+/*
+=====================================
+? GET PETS BY USER WITH REQUEST INFO
+=====================================
+ */
+router.get("/myPets/requestInfo/", middleware.validateSession, async(req, res) => {
+    let {id} = req.user;
+    try{
+        const userPets = await PetModel.findAll({
+            where:{
+                userId: id
+            },
+            include:[{
+                model: RequestModel
+            }]
+        });
+        res.status(200).json(userPets);
+    } catch (err) {
+        res.status(500).json({ 
+            message: "Unable to retrieve pets",
+            error: err });
+    }
+});
+
+/*
+============================
+* GET PET BY PET ID 
+============================
+
+*/
+
+router.get("/selectPet/:id", async(req, res) => {
+    const petId = req.params.id;
+    
+    try {
+    const pet = await PetModel.findAll({
+        where: {
+            id: petId,
+                },
+                include:[{
+                    model: ReviewModel
+                }]    
+               
+    });
+        res.status(200).json(pet);
+} catch (err) {
+    res.status(500).json({
+        message:'Unable to retrieve pet',
+        error: err
+    })
+}    
+    
+});
+
 
 
 

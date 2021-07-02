@@ -9,6 +9,8 @@ app.use(Express.json());
 app.use(require('./middleware/headers'));
 app.use("/user", controllers.userController);
 app.use("/pet", controllers.petController);
+app.use("/request", controllers.requestController);
+app.use("/review", controllers.reviewController);
 
 
 dbConnection.authenticate()

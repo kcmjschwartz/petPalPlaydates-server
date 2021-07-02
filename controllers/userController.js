@@ -136,7 +136,7 @@ router.put("/admin/update/:id", middleware.validateAdmin, async(req, res) =>{
 
 /*
 ==============================
-!DELETE PROTECTED ROUTE
+!DELETE USER PROTECTED ROUTE
 ==============================
 */
 
