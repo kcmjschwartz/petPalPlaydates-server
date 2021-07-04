@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const {PetModel, UserModel, RequestModel} = require('../models');
 const middleware = require("../middleware");
-const models = require('../models');
+
 
 
 /*
@@ -100,42 +100,34 @@ router.put("/update/:requestId", middleware.validateSession , async (req, res) =
 
 
 /*
-===========================
-UPDATE REQUEST FOR MY PETS
-===========================
+===================================
+? UPDATE REQUEST STATUS FOR MY PETS
+===================================
+**Code below was inspired by the code of Eli T. Drumm at the following GitHub repo
+https://github.com/etdr/WD70B-associations
 */
 
-// router.put("/update/:requestId", middleware.validateSession , async (req, res) => {
-//     const { status, wayToContact, comments } = req.body.request;
-//     const requestId = req.params.requestId;
-//     const userId = req.user.id;
+router.put("/update/myPet/:petId/thisrequest/:requestId", middleware.validateSession, async (req, res) => {
+    const { status } = req.body.request;
+    const user = await UserModel.findOne({ where:{id: req.user.id}})
+    const pet = await PetModel.findOne({
+        where:{ id: req.params.petId, userId: user.id}})
+    const query = {where:{id:req.params.requestId, petId:pet.id}}
+    const updatedRequest = {
+        status
+    };
+    try{
+        const update = await RequestModel.update(updatedRequest, query);
+            res.status(200).json({
+                        message: 'Request Updated',
+                        update});
+                    } catch (err) {
+                    res.status(500).json({
+                    message:`Request Failed to Update: ${err}`})
 
-//     const query = {
-//         where: {
-//             id: requestId,
-//             userId: userId
-//         }
-//     };
+}
 
-//     const updatedRequest = {
-//         status, wayToContact, comments
-//     };
-
-//     try {
-//         const update = await RequestModel.update(updatedRequest, query);
-//         res.status(200).json({
-//             message: 'Request Updated',
-//             update});
-//         } catch (err) {
-//         res.status(500).json({
-//         message:`Request Failed to Update: ${err}`
-//     })
-//     }
-// });
-
-
-
-
+})
 
 
 /*

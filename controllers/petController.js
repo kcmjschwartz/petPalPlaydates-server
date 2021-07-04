@@ -1,8 +1,7 @@
 const router = require('express').Router();
 const {PetModel, RequestModel, ReviewModel, UserModel} = require('../models');
 const middleware = require("../middleware");
-const Pet = require('../models/pet');
-const User = require('../models/user');
+
 
 /*
 ===============
