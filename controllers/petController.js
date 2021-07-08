@@ -36,7 +36,11 @@ router.post('/create/', middleware.validateSession, async (req, res) =>{
 
 router.get('/allpets', async (req, res) =>{
     try{
-        const entries = await PetModel.findAll();
+        const entries = await PetModel.findAll({ 
+            include: [
+                {model: ReviewModel, 
+                }]
+        });
         res.status(200).json(entries);
     } catch (err) {
         res.status(500).json({error: err});
