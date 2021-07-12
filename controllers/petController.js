@@ -221,7 +221,10 @@ router.get("/myPets/requestInfo/", middleware.validateSession, async(req, res) =
                 userId: id
             },
             include:[{
-                model: RequestModel
+                model:RequestModel,
+                include:{
+                    model: UserModel
+                }                                 
             }]
         });
         res.status(200).json(userPets);

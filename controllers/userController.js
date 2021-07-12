@@ -86,6 +86,7 @@ router.post("/login", async (req, res) => {
     }
 });
 
+
 /*
 ==============================
 !GET ALL USERS PROTECTED ROUTE

@@ -23,5 +23,7 @@ PetModel.hasMany(ReviewModel);
 PetModel.hasMany(RequestModel);
 
 RequestModel.belongsTo(PetModel);
+RequestModel.belongsTo(UserModel);
 
 ReviewModel.belongsTo(PetModel);
+ReviewModel.belongsTo(UserModel);
