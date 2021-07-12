@@ -39,6 +39,9 @@ router.get('/allpets', async (req, res) =>{
         const entries = await PetModel.findAll({ 
             include: [
                 {model: ReviewModel, 
+                include:[{
+                    model: UserModel,
+                }]
                 }]
         });
         res.status(200).json(entries);
@@ -251,7 +254,10 @@ router.get("/selectPet/:id", async(req, res) => {
             id: petId,
                 },
                 include:[{
-                    model: ReviewModel
+                    model: ReviewModel,
+                    include:[{
+                        model: UserModel
+                    }]
                 }]    
                
     });
