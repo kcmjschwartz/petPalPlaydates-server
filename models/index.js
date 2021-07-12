@@ -18,12 +18,12 @@ UserModel.hasMany(PetModel);
 UserModel.hasMany(RequestModel);
 UserModel.hasMany(ReviewModel);
 //Pets
-PetModel.belongsTo(UserModel);
+PetModel.belongsTo(UserModel, {onDelete:'CASCADE',foreignKey: 'userId'});
 PetModel.hasMany(ReviewModel);
 PetModel.hasMany(RequestModel);
 //Requests
-RequestModel.belongsTo(PetModel);
-RequestModel.belongsTo(UserModel);
+RequestModel.belongsTo(PetModel, {onDelete:'CASCADE',foreignKey: 'petId'});
+RequestModel.belongsTo(UserModel, {onDelete:'CASCADE',foreignKey: 'userId'});
 //Reviews
-ReviewModel.belongsTo(PetModel);
-ReviewModel.belongsTo(UserModel);
+ReviewModel.belongsTo(PetModel, {onDelete:'CASCADE',foreignKey: 'petId'});
+ReviewModel.belongsTo(UserModel, {onDelete:'CASCADE',foreignKey: 'userId'});

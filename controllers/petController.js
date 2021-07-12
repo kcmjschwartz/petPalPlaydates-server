@@ -172,6 +172,12 @@ router.delete("/delete/myPet/:id", middleware.validateSession, async(req, res) =
     const userId = req.user.id;
 
     try {
+        const deleteRequests = await RequestModel.destroy({
+            where: {
+                petId: req.params.id
+            }
+        })
+
         const petDeleted = await PetModel.destroy({
             where: {id: petId, userId:userId }
         })

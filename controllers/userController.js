@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const { UniqueConstraintError } = require("sequelize/lib/errors");
-const {UserModel} = require('../models');
+const {UserModel, PetModel, RequestModel} = require('../models');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const middleware = require("../middleware");
@@ -144,6 +144,16 @@ router.put("/admin/update/:id", middleware.validateAdmin, async(req, res) =>{
 router.delete("/admin/delete/:id", middleware.validateAdmin, async(req, res) =>{
     
     try {
+        const deletePets = await PetModel.destroy({
+            where:{
+                userId:req.params.id
+            }
+        })
+        const deleteRequests = await RequestModel.destroy({
+            where: {
+                userId: req.params.id
+            }
+        })
         const userDeleted = await UserModel.destroy({
             where: {id: req.params.id}
         })
